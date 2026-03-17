@@ -24,6 +24,6 @@ const folioSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-});
+},{timestamps:true});
 
 export const Folio = mongoose.model("Folio", folioSchema);

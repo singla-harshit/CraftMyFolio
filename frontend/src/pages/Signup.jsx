@@ -811,62 +811,6 @@ const SignUpForm = () => {
   };
   const prevStep = () => setStep((prev) => prev - 1);
 
-  // const handleSubmit = async () => {
-  //   if (validateStep()) {
-  //     const finalData = {
-  //       ...formData,
-  //       skills: formData.skills
-  //         .split(",")
-  //         .map((s) => s.trim())
-  //         .filter(Boolean),
-  //     };
-      
-  //     // 6. UPDATED: Clean up experience data before sending
-  //     if (finalData.hasExperience) {
-  //       finalData.experience = finalData.experience.map(exp => {
-  //         if (exp.isCurrent) {
-  //           return { ...exp, to: null }; // Set 'to' to null if current
-  //         }
-  //         return exp;
-  //       });
-  //     } else {
-  //       finalData.experience = [];
-  //     }
-      
-  //     delete finalData.confirmPassword;
-  //     delete finalData.hasExperience;
-      
-  //     // We don't need to send the avatar file in the JSON
-  //     // This needs to be handled with FormData, which is a bigger change.
-  //     // For now, let's remove it from the JSON payload.
-  //     if(!finalData.avatar)
-  //     delete finalData.avatar; 
-  //     console.log("Final Data Submitted:", finalData);
-
-  //     try {
-  //       const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(finalData),
-  //       });
-
-  //       const result = await response.json(); // Read the response
-        
-  //       if (!response.ok) {
-  //         throw new Error(result.message || "Something went wrong");
-  //       }
-        
-  //       // console.log("Server Response:", result);
-  //       alert("Signed up successfully! Redirecting to Login Page.");
-  //       navigate("/signin");
-  //     } catch (error) {
-  //       console.error("Submission Failed:", error);
-  //       alert(`Error: ${error.message}`);
-  //     }
-  //   }
-  // };
 
 const handleSubmit = async () => {
   if (validateStep()) {
@@ -921,9 +865,6 @@ const handleSubmit = async () => {
     if (finalData.avatar) {
       fd.append("avatar", finalData.avatar); 
     }
-
-    console.log("Sending FormData…");
-    console.log(finalData)
 
     // 5. Send the request (IMPORTANT: no JSON headers)
     try {

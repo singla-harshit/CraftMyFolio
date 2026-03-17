@@ -3,6 +3,12 @@ import { useEffect } from "react";
 // 1. We must now import useAuth from the hook file, not the context file
 import { useAuth } from "../hooks/useAuth"; 
 
+const authErrorMessages = [
+        'Not authorized, token failed',
+        'Failed to authenticate token.',
+        'No user found with this token'
+      ];
+
 const fetchUserData = async (token) => {
   // If there's no token, don't even try to fetch
   if (!token) return null;
@@ -39,18 +45,15 @@ export function useUser() {
   const { token, logout } = useAuth(); 
 
   const query = useQuery({
-    queryKey: ["user", token],
+    queryKey: ["user"],
+    
     queryFn: () => fetchUserData(token),
     enabled: !!token,
     
     // 3. Update retry logic - don't retry on auth errors
     retry: (failureCount, error) => {
       // Don't retry if it was an auth error
-      const authErrorMessages = [
-        'Not authorized, token failed',
-        'Failed to authenticate token.',
-        'No user found with this token'
-      ];
+      
       if (authErrorMessages.includes(error.message)) {
         return false;
       }
@@ -64,11 +67,6 @@ export function useUser() {
       console.log("Error detected:", query.error.message);
       
       // Check if the error is an authentication error
-      const authErrorMessages = [
-        'Not authorized, token failed',
-        'Failed to authenticate token.',
-        'No user found with this token'
-      ];
       
       if (authErrorMessages.includes(query.error.message)) {
         console.error("Invalid token detected. Logging out...");

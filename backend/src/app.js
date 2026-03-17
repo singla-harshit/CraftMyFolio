@@ -1,11 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { router as authRouter } from "./route/authRoutes.js";
-import { router as folioRouter} from "./route/folioRoutes.js";
-import { consoleLogger, fileLogger } from "./util/logger.js";
-
-
+import { router as authRouter } from "./routes/authRoutes.js";
+import { router as folioRouter} from "./routes/folioRoutes.js";
+import { consoleLogger, fileLogger } from "./utils/logger.js";
 
 const app = express();
 

@@ -1,14 +1,13 @@
-import { User } from "../model/userModel.js";
-import asyncHandler from '../util/asyncHandler.js'; // Adjust the path
+import { User } from "../models/userModel.js";
+import asyncHandler from '../utils/asyncHandler.js'; // Adjust the path
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { uploadOnCloudinary } from "../util/cloudUpload.js";
-import { saveUserAndRespond } from "../util/controllerUtils.js";
+import { uploadOnCloudinary } from "../utils/cloudUpload.js";
+import { saveUserAndRespond } from "../utils/controllerUtils.js";
 
 
-const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = asyncHandler(async (req, res) => {
 
-  // try {
     // 1. Extract all required fields from the request body
     const { name, email, password, dob, address, phone } = req.body;
 
@@ -72,18 +71,9 @@ const registerUser = asyncHandler(async (req, res) => {
       message: "User registered successfully.",
       data: userResponse,
     });
-  // } catch (error) {
-  //   console.error("Signup Error:", error);
-  //   return res.status(500).json({
-  //     success: false,
-  //     message: "Internal Server Error",
-  //     error: error.message,
-  //   });
-  // }
 });
 
-const loginUser = asyncHandler(async (req, res) => {
-  // try{
+export const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -130,16 +120,9 @@ const loginUser = asyncHandler(async (req, res) => {
         message: "Logged in successfully.",
         data: { ...userResponse, token },
       });
-  // } catch (error) {
-  //   console.error("Signin Error:", error);
-  //   return res.status(500).json({
-  //     success: false,
-  //     message: "Internal Server Error",
-  //   });
-  // }
 });
 
-const updateUser = asyncHandler(async (req, res) => {
+export const updateUser = asyncHandler(async (req, res) => {
   // 1. Get the user from the database.
   // We trust `req.user._id` because it comes from your secure authMiddleware.
   const user = await User.findById(req.user._id);
@@ -207,7 +190,7 @@ const updateUser = asyncHandler(async (req, res) => {
   });
 });
 
-const updateUserAvatar = asyncHandler(async (req, res) => {
+export const updateUserAvatar = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
     res.status(404); throw new Error('User not found.');
@@ -229,11 +212,9 @@ const imageUrl = await uploadOnCloudinary(req.file?.path);
   await saveUserAndRespond(user, res);
 });
 
-const getMe = (req, res) => {
+export const getMe = (req, res) => {
   return res.status(200).json({
     message: "User verified",
     data: req.user,
   });
 };
-
-export { registerUser, loginUser , updateUser , updateUserAvatar , getMe };

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-// import { useAuth } from "../hooks/useAuth";
-import { useUser } from "../hooks/useUser"; // 1. Import useUser to get user data
+import { useUser } from "../hooks/useUser";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { templateInfo } from "../folioTemplate/index.js";
 import { SlugSpinner, ErrorIcon, CheckIcon } from "../components/ui/icons.jsx";
 import { useDebounce } from "../hooks/useDebounce.js";
+import { useAuth } from "../hooks/useAuth.js";
 
 // --- A Simple Loading Spinner Component ---
 const FullPageLoader = () => (
@@ -31,10 +31,10 @@ const checkSlug = async (slug) => {
 
 export default function CreateFolio() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient(); // Get the query client
+  const queryClient = useQueryClient();
 
   // 1. Get auth and user data
-  const token = localStorage.getItem("token");
+  const { token } = useAuth();
   const { data: user, isLoading: isUserLoading, error: userError } = useUser();
 
   // 2. Check if we are in "Edit Mode"
@@ -207,13 +207,12 @@ export default function CreateFolio() {
               {isEditMode ? "Your portfolio URL" : "Choose your portfolio URL"}
             </label>
             <div
-              className={`flex items-center border rounded-lg p-2 transition-all ${
-                showSlugValidation && isSlugValid
+              className={`flex items-center border rounded-lg p-2 transition-all ${showSlugValidation && isSlugValid
                   ? "border-green-500 ring-2 ring-green-100"
                   : showSlugValidation && isSlugInvalid
                     ? "border-red-500 ring-2 ring-red-100"
                     : "border-slate-300 focus-within:ring-2 focus-within:ring-indigo-500"
-              }`}
+                }`}
             >
               <span className="text-slate-500 bg-slate-100 p-2 rounded-md">
                 craftfolio.com/
@@ -262,11 +261,10 @@ export default function CreateFolio() {
                   key={template.id}
                   type="button"
                   onClick={() => setSelected(template.id)}
-                  className={`border rounded-lg overflow-hidden group transition-all duration-300 ${
-                    selected === template.id
+                  className={`border rounded-lg overflow-hidden group transition-all duration-300 ${selected === template.id
                       ? "ring-2 ring-indigo-500 ring-offset-2 border-indigo-500"
                       : "border-slate-200 hover:border-indigo-500 hover:shadow-md"
-                  }`}
+                    }`}
                 >
                   <img
                     src={template.thumbnail}

@@ -1,6 +1,6 @@
-import asyncHandler from '../util/asyncHandler.js';
-import {Folio} from '../model/folioModel.js';
-import {User} from '../model/userModel.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import {Folio} from '../models/folioModel.js';
+import {User} from '../models/userModel.js';
 // import { saveUserAndRespond } from '../utils/controllerUtils.js';
 
 /**

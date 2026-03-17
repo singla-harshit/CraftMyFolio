@@ -1,9 +1,5 @@
 import FirstImg from '../assets/templates/FirstImg.jpg'
 
-// export const templates = {
-    //     TemplateGlass,
-    //     Second
-    // }
 
 import TemplateHazard from './TemplateHazard'
 import TemplateBento from './TemplateBento'
@@ -16,15 +12,17 @@ import TemplateNeoPop from './TemplateNeoPop'
 import TemplateResume from './TemplateResume'
 import TemplateTerminal from './TemplateTerminal'
 import TemplateTimeline from './TemplateTimeline'
+import TemplatePro from './TemplateHero'
+
 
 
 
 export const templateInfo = [
     {
-        id : "Third",
-        name : "Industry Hazard",
+        id : "Hero",
+        name : "Hero",
         thumbnail : FirstImg,
-        component : TemplateHazard
+        component : TemplatePro
     },
     {
         id : "Industry Hazard",

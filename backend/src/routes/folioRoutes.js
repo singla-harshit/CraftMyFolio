@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect } from '../middlewares/authMiddleware.js';
 import {
   createFolio,
   getPublicFolio,
@@ -7,7 +7,7 @@ import {
   updateMyFolio,
   deleteMyFolio
   ,checkSlugAvailability
-} from '../controller/folioController.js';
+} from '../controllers/folioController.js';
 
 export const router = express.Router();
 
