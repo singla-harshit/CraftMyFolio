@@ -33,8 +33,7 @@ const format =
 /*
   Console logger (for development)
 */
-export const consoleLogger = morgan("dev");
-
+export const consoleLogger = morgan(format);
 /*
   File logger (for production / persistent logs)
 */

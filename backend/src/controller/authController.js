@@ -6,18 +6,14 @@ import { uploadOnCloudinary } from "../util/cloudUpload.js";
 import { saveUserAndRespond } from "../util/controllerUtils.js";
 
 
-const registerUser = async (req, res) => {
-  console.log("REQ FILE:", req.file);
-  console.log("REQ BODY:", req.body);
+const registerUser = asyncHandler(async (req, res) => {
 
-  try {
+  // try {
     // 1. Extract all required fields from the request body
     const { name, email, password, dob, address, phone } = req.body;
-    // console.log(name , email , password, dob, address, phone)
 
     // 2. Validate that all required fields are present
     const requiredFields = { name, email, password, dob, address, phone };
-    // console.log(req.body);
     for (const [key, value] of Object.entries(requiredFields)) {
       if (!value) {
         return res.status(400).json({
@@ -37,13 +33,10 @@ const registerUser = async (req, res) => {
       });
     }
     //4 Handle avatar upload if file is provided
-    // console.log("File in Request:", req.file);
     const avatarLocalPath=req.file?.path;
     console.log("Avatar local Path " ,avatarLocalPath)
-    // console.log("Avatar Local Path:", avatarLocalPath);
         let avatar=undefined;
         if(!avatarLocalPath){
-          // console.log("No avatar file provided.");
             avatar="";
         }
         else{
@@ -79,18 +72,18 @@ const registerUser = async (req, res) => {
       message: "User registered successfully.",
       data: userResponse,
     });
-  } catch (error) {
-    console.error("Signup Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: error.message,
-    });
-  }
-};
+  // } catch (error) {
+  //   console.error("Signup Error:", error);
+  //   return res.status(500).json({
+  //     success: false,
+  //     message: "Internal Server Error",
+  //     error: error.message,
+  //   });
+  // }
+});
 
-const loginUser = async (req, res) => {
-  try {
+const loginUser = asyncHandler(async (req, res) => {
+  // try{
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -137,14 +130,14 @@ const loginUser = async (req, res) => {
         message: "Logged in successfully.",
         data: { ...userResponse, token },
       });
-  } catch (error) {
-    console.error("Signin Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
-  }
-};
+  // } catch (error) {
+  //   console.error("Signin Error:", error);
+  //   return res.status(500).json({
+  //     success: false,
+  //     message: "Internal Server Error",
+  //   });
+  // }
+});
 
 const updateUser = asyncHandler(async (req, res) => {
   // 1. Get the user from the database.
@@ -174,8 +167,6 @@ const updateUser = asyncHandler(async (req, res) => {
           return res.status(500).json({ message: 'Error uploading new avatar to Cloudinary' });
         }
         user.avatar = cloudinaryResponse.url;
-  }else{
-        user.avatar = user.avatar;
   }
   user.resume = req.body.resume || user.resume;
 
@@ -238,5 +229,11 @@ const imageUrl = await uploadOnCloudinary(req.file?.path);
   await saveUserAndRespond(user, res);
 });
 
+const getMe = (req, res) => {
+  return res.status(200).json({
+    message: "User verified",
+    data: req.user,
+  });
+};
 
-export { registerUser, loginUser , updateUser , updateUserAvatar};
+export { registerUser, loginUser , updateUser , updateUserAvatar , getMe };

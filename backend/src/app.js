@@ -33,4 +33,15 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/folio", folioRouter);
 
+// After all routes (Error Handling Middleware)
+app.use((err, req, res, next) => {
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
+  });
+});
+
+
 export { app };

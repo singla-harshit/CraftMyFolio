@@ -18,8 +18,6 @@ router.patch('/me', protect, updateMyFolio);
 router.delete('/me', protect, deleteMyFolio);
 
 // --- Public Route (Anyone can access) ---
+router.get('/check-slug/:slug', checkSlugAvailability);
 router.get('/:slug', getPublicFolio);
 
-// export const router;
-
-router.get('/check-slug/:slug', checkSlugAvailability);

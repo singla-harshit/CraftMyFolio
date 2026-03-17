@@ -3,9 +3,7 @@ import { User } from "../model/userModel.js";
 import "dotenv/config";
 
 const protect = async (req, res, next) => {
-  // console.log("Starting the verification backend")
   let token;
-  // 1. Check if the Authorization header exists and starts with "Bearer"
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -23,7 +21,6 @@ const protect = async (req, res, next) => {
           .json({ message: "No user found with this token" });
       }
 
-      // 5. If everything is successful, call next() to proceed to the route handler
       next();
     } catch (error) {
       console.error(error);
@@ -36,11 +33,6 @@ const protect = async (req, res, next) => {
   }
 };
 
-const sendRes = (req, res) => {
-  return res.status(201).json({
-    message: "User verified",
-    data: req.user,
-  });
-};
 
-export { protect, sendRes };
+
+export { protect };
