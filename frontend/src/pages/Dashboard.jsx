@@ -1,6 +1,6 @@
 // src/pages/DashboardPage.jsx
-import React, { useState} from "react";
-import { Navigate ,useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser"; // 1. Import the new useUser hook
 import { IconWrapper, icons } from "../components/ui/icons";
 
@@ -31,7 +31,7 @@ const DashboardPage = () => {
 
   const handleViewFolio = () => {
     if (user && user.folio_id && user.folio_id.slug) {
-      navigate(`/folio/${user.folio_id.slug}`);
+      window.open(`/folio/${user.folio_id.slug}`, "_blank");
     } else {
       navigate("/create");
     }
@@ -49,8 +49,8 @@ const DashboardPage = () => {
         return <ExperienceDetails experience={user.experience} />;
       case "Projects":
         return <ProjectsDetails projects={user.projects} />;
-      case "Skills" : 
-        return <SkillsDetails skills={user.skills} />
+      case "Skills":
+        return <SkillsDetails skills={user.skills} />;
       case "Social Links":
         return <SocialLinksDetails social={user.social} />;
       case "Testimonials":
@@ -91,8 +91,19 @@ const DashboardPage = () => {
           onClick={handleViewFolio}
           className="w-full mb-6 px-4 py-2 bg-indigo-100 text-indigo-700 font-semibold rounded-lg hover:bg-indigo-200 transition-colors flex items-center justify-center"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            />
           </svg>
           {user.folio_id ? "View My Folio" : "Create My Folio"}
         </button>

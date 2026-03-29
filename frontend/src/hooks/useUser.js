@@ -31,7 +31,7 @@ const fetchUserData = async (token) => {
     }
 
     const response = await res.json();
-    return response.data; // Return the user data object
+    return response.data; // Return the user data object  
 
   } catch (error) {
     console.error(error.message);
@@ -41,7 +41,6 @@ const fetchUserData = async (token) => {
 };
 
 export function useUser() {
-  // 2. Get BOTH 'token' and 'logout' from useAuth
   const { token, logout } = useAuth(); 
 
   const query = useQuery({
@@ -50,10 +49,7 @@ export function useUser() {
     queryFn: () => fetchUserData(token),
     enabled: !!token,
     
-    // 3. Update retry logic - don't retry on auth errors
-    retry: (failureCount, error) => {
-      // Don't retry if it was an auth error
-      
+    retry: (failureCount, error) => {     
       if (authErrorMessages.includes(error.message)) {
         return false;
       }
@@ -65,12 +61,9 @@ export function useUser() {
   useEffect(() => {
     if (query.error) {
       console.log("Error detected:", query.error.message);
-      
-      // Check if the error is an authentication error
-      
+            
       if (authErrorMessages.includes(query.error.message)) {
         console.error("Invalid token detected. Logging out...");
-        // Clear the bad token
         logout();
       }
     }

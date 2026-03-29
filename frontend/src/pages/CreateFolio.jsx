@@ -33,16 +33,12 @@ export default function CreateFolio() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 1. Get auth and user data
   const { token } = useAuth();
   const { data: user, isLoading: isUserLoading, error: userError } = useUser();
 
-  // 2. Check if we are in "Edit Mode"
-  // The 'user' object is populated with 'folio_id' (which has the slug)
   const isEditMode = Boolean(user?.folio_id);
   const existingFolio = user?.folio_id;
 
-  // 3. Set initial state from the user's existing folio, if it exists
   const [selected, setSelected] = useState(existingFolio?.template_id || null);
   const [slug, setSlug] = useState(existingFolio?.slug || "");
 
@@ -55,7 +51,6 @@ export default function CreateFolio() {
     enabled: !!debouncedSlug,
   });
 
-  // 5. Setup the CREATE mutation
   const createMutation = useMutation({
     mutationFn: async (folioData) => {
       return fetch(`${API_BASE_URL}/folio`, {
@@ -75,32 +70,27 @@ export default function CreateFolio() {
     onSuccess: async (data) => {
       alert("Portfolio created successfully!");
       const newSlug = data.data.slug;
-
-      // 1. Invalidate the user query (can run in background)
       queryClient.invalidateQueries({ queryKey: ["user"] });
 
-      // 2. AWAIT the prefetch for the new page's data
       await queryClient.prefetchQuery({
         queryKey: ["folio", newSlug],
         queryFn: () => fetchPublicFolio(newSlug),
       });
 
-      navigate(`/folio/${newSlug}`); // <-- Remember to use hash router path if needed
+      navigate(`/folio/${newSlug}`); 
     },
     onError: (error) => alert(`Error: ${error.message}`),
   });
 
-  // 6. Setup the UPDATE mutation
   const updateMutation = useMutation({
     mutationFn: async (folioData) => {
       return fetch(`${API_BASE_URL}/folio/me`, {
-        // Use the 'PATCH /me' route
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(folioData), // Send new template_id and/or slug
+        body: JSON.stringify(folioData),
       }).then((res) =>
         res.json().then((data) => {
           if (!res.ok) throw new Error(data.message);
@@ -112,28 +102,23 @@ export default function CreateFolio() {
       alert("Portfolio updated successfully!");
       const newSlug = data.data.slug;
 
-      // 1. Invalidate the user query
       queryClient.invalidateQueries({ queryKey: ["user"] });
 
-      // 2. AWAIT the prefetch
       await queryClient.prefetchQuery({
         queryKey: ["folio", newSlug],
         queryFn: () => fetchPublicFolio(newSlug),
       });
 
-      // 3. NOW navigate
-      navigate(`/folio/${newSlug}`); // <-- Remember to use hash router path if needed
+      navigate(`/folio/${newSlug}`);
     },
     onError: (error) => alert(`Error: ${error.message}`),
   });
 
-  // Is the mutation (either create or update) running?
   const isMutating = createMutation.isLoading || updateMutation.isLoading;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if slug is available (if it's not the user's current slug)
     const slugIsTaken =
       slugAvailability?.available === false && slug !== existingFolio?.slug;
 

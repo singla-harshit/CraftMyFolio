@@ -28,8 +28,6 @@ export default function AuthProvider({ children }) {
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");
-    // MODIFICATION: More precise cache removal
-    // This just removes the user's data, not all other queries.
     queryClient.removeQueries({ queryKey: ['user'] });
   };
 

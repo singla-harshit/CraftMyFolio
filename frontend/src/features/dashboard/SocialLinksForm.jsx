@@ -40,7 +40,7 @@ const SocialLinksForm = ({ user, onClose }) => {
               <option value="GitHub">GitHub</option>
               <option value="LinkedIn">LinkedIn</option>
               <option value="Twitter">Twitter</option>
-              <option value="Website">Website</option>
+              <option value="LeetCode">LeetCode</option>
               <option value="Other">Other</option>
             </FormSelect>
             <FormInput id={`url-${index}`} name="url" label="URL" value={link.url} onChange={(e) => handleChange(index, e)} placeholder="https://..." />

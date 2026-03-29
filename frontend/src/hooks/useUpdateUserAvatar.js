@@ -1,4 +1,3 @@
-// In a new file: src/hooks/useUpdateUserAvatar.js
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./useAuth";

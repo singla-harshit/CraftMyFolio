@@ -51,7 +51,7 @@ const TemplateResume = ({ user }) => {
           <div className="md:col-span-2 space-y-10">
             
             {/* Experience Section */}
-            <section>
+            { experience && experience.length > 0 && <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-6">Professional Experience</h2>
               <div className="space-y-8">
                 {experience.map((exp, i) => (
@@ -67,7 +67,7 @@ const TemplateResume = ({ user }) => {
                   </div>
                 ))}
               </div>
-            </section>
+            </section>}
 
             {/* Projects Section */}
             <section>
@@ -77,11 +77,11 @@ const TemplateResume = ({ user }) => {
                   <div key={i} className="border-l-2 border-slate-100 pl-4 hover:border-slate-900 transition-colors">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-bold text-slate-800">{proj.title}</h3>
-                      {proj.deployed && <a href={proj.deployed} className="text-slate-400 hover:text-black"><ExternalLink size={14}/></a>}
+                      {proj.deployed && <a href={proj.deployed} target='_blank' className="text-slate-400 hover:text-black"><ExternalLink size={14}/></a>}
                     </div>
-                    <p className="text-sm text-slate-600 mb-2">{proj.description}</p>
+                    <p className="text-sm text-slate-600 mb-2 whitespace-pre-line">{proj.description}</p>
                     {proj.github && (
-                      <a href={proj.github} className="text-[10px] font-mono text-slate-400 flex items-center gap-1 hover:text-black">
+                      <a href={proj.github} target='_blank' className="text-[10px] font-mono text-slate-400 flex items-center gap-1 hover:text-black">
                         <Github size={12}/> source_code
                       </a>
                     )}
@@ -113,7 +113,8 @@ const TemplateResume = ({ user }) => {
                 {education.map((edu, i) => (
                   <div key={i}>
                     <p className="text-xs font-bold uppercase text-slate-500">{edu.level}</p>
-                    <p className="text-sm font-bold text-slate-800">{edu.degree || edu.fieldOfStudy}</p>
+                    <p className="text-sm font-bold text-slate-800">{edu.degree}</p>
+                    {edu.fieldOfStudy && <p className="text-sm font-bold text-slate-600">{edu.fieldOfStudy}</p>}
                     <p className="text-xs text-slate-600">{edu.institution}</p>
                     <div className="flex justify-between mt-1 text-[10px] font-mono text-slate-400 uppercase">
                       <span>{edu.yearOfCompletion}</span>
@@ -129,7 +130,7 @@ const TemplateResume = ({ user }) => {
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Social</h2>
               <div className="space-y-2">
                 {social.map((s, i) => (
-                  <a key={i} href={s.url} className="flex items-center gap-3 text-xs text-slate-600 hover:text-blue-600 transition group">
+                  <a key={i} target='_blank' href={s.url} className="flex items-center gap-3 text-xs text-slate-600 hover:text-blue-600 transition group">
                     <span className="p-1.5 bg-slate-50 rounded group-hover:bg-blue-50 transition-colors">
                       {s.platform.toLowerCase().includes('github') && <Github size={14}/>}
                       {s.platform.toLowerCase().includes('linkedin') && <Linkedin size={14}/>}

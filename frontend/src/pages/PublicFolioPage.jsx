@@ -40,11 +40,8 @@ const fetchPublicFolio = async (slug) => {
 
 // --- Main Component ---
 const PublicFolioPage = () => {
-  // 1. Get the 'slug' from the URL (e.g., /folio/harshit-singla -> slug = "harshit-singla")
   const { slug } = useParams();
 
-  // 2. Fetch the public data
-  // We use the slug as the unique query key so caching works per-portfolio
   const { data, isLoading, error } = useQuery({
     queryKey: ['folio', slug], 
     queryFn: () => fetchPublicFolio(slug),
@@ -62,12 +59,8 @@ const PublicFolioPage = () => {
     return <ErrorView message={error.message} />;
   }
 
-  // 5. Destructure the data
-  // The backend sends: { slug: "...", template_id: "...", user_id: { ...user data... } }
   const { template_id, user_id: user } = data;
 
-  // 6. Find the correct Template Component
-  // We look up the component inside your templateInfo array using the ID from the DB
   const selectedTemplate = templateInfo.find(t => t.id === template_id);
   const TemplateComponent = selectedTemplate?.component;
 
@@ -84,9 +77,6 @@ const PublicFolioPage = () => {
       </div>
     );
   }
-
-  // 8. Render the Template!
-  // We pass the 'user' object as a prop. The template handles all the styling.
   return <TemplateComponent user={user} />;
 };
 
