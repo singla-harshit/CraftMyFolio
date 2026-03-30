@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import {Folio} from '../models/folioModel.js';
 import {User} from '../models/userModel.js';
+import redisClient from '../config/redisClient.js';
 // import { saveUserAndRespond } from '../utils/controllerUtils.js';
 
 /**
@@ -59,6 +60,13 @@ export const getPublicFolio = asyncHandler(async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   
   // 1. Find the folio by its 'slug'
+  const cacheKey = `folio:${slug}`;
+  const cachedFolio = await redisClient.get(cacheKey);
+
+  if (cachedFolio) {
+    return res.status(200).json(JSON.parse(cachedFolio));
+  }
+
   const folio = await Folio.findOne({ slug: slug });
 
   if (!folio) {
@@ -72,9 +80,10 @@ export const getPublicFolio = asyncHandler(async (req, res) => {
     path: 'user_id',
     select: '-password' 
   });
+  await redisClient.setEx(cacheKey, 3600, JSON.stringify(folio));
 
   // 3. Send the complete object back (folio + populated user data)
-  res.status(200).json(folio);
+  return res.status(200).json(folio);
 });
 
 /**
@@ -112,14 +121,15 @@ export const updateMyFolio = asyncHandler(async (req, res) => {
 
   // Update only the fields that are sent
   folio.template_id = template_id || folio.template_id;
-  // Uncomment these when you add them to your model
   // folio.main_color = main_color || folio.main_color;
   // folio.secondry_color = secondry_color || folio.secondry_color;
   // folio.accent_color = accent_color || folio.accent_color;
   // folio.font = font || folio.font;
 
-  // We can't use saveUserAndRespond because it returns a User, not a Folio
+  // Save the updated data to MongoDB
   const updatedFolio = await folio.save();
+  console.log("Removed from redis");
+  await redisClient.del(`folio:${folio.slug.toLowerCase()}`);
   res.status(200).json({ data: updatedFolio });
 });
 

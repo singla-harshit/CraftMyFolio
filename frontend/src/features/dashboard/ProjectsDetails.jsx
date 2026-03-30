@@ -32,7 +32,7 @@ const ProjectsDetails = ({ projects = [] }) => {
               )}
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-indigo-700">{project.title}</h3>
-                <p className="text-gray-600 mt-2 h-20 overflow-hidden text-ellipsis">{project.description}</p>
+                <p className="text-gray-600 mt-2 overflow-hidden text-ellipsis whitespace-pre-line">{project.description}</p>
                 <div className="flex items-center space-x-4 mt-4 pt-4 border-t border-gray-100">
                   {project.github && (
                     <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-indigo-600 font-medium">GitHub</a>
