@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/folio/:slug",
+    path: "/folio/:slug/*",
     element: <PublicFolioPage />,
     errorElement: <ErrorPage />,
   },
